@@ -1,0 +1,86 @@
+---
+title: "Dataset"
+author: "F179412"
+date: "10/15/2021"
+output: pdf_document
+---
+
+Mian Mudarrib F179412
+Afaq Tahir F178002
+Talha Tanveer F178161
+
+
+Setup of Rhdf5 Installation
+
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(version = "3.13")
+BiocManager::install("rhdf5")
+```
+
+Importing Library for Future Use
+
+```{r}
+library(rhdf5)
+```
+
+Checking Structure of HDF5 File
+
+```{r}
+h5ls("dataset.hdf5")
+```
+
+This dataset contains from 2 domains of NeonScience satellite capturing temperature data of Seatle city
+
+Each domain has divided city in to multiple booms lets take data from  domain 3 and Boom 1 for instance
+
+```{r}
+data<- h5read("dataset.hdf5","/Domain_03/OSBS/min_1/boom_1")
+```
+
+Lets display what we read at the current moment
+
+```{r}
+data
+```
+
+Lets Format the date Time Column
+
+```{r}
+new <- do.call( rbind , strsplit( as.character( data$temperature$date ) , " " ) )
+
+
+```
+
+```{r}
+data$temperature<-cbind( data$temperature , NDate = new[,1] , Time = new[,2] )
+```
+
+Lets delete the old date time column 
+
+```{r}
+ data$temperature <- subset (data$temperature, select = -date)
+
+```
+
+
+Lets see the changes we have done now 
+
+```{r}
+data
+```
+
+Now lets group on date and calculate average of mean temperatures
+
+```{r}
+sub<-aggregate(data$temperature$mean, list(data$temperature$NDate), mean)
+```
+
+
+Now lets plot this data 
+
+```{r}
+ggplot(data = sub, aes(Group.1, x,group = 1)) +geom_line()
+```
+
