@@ -81,6 +81,8 @@ sub<-aggregate(data$temperature$mean, list(data$temperature$NDate), mean)
 Now lets plot this data 
 
 ```{r}
+install.packages("ggplot2")
+library("ggplot2")
 ggplot(data = sub, aes(Group.1, x,group = 1)) +geom_line()
 ```
 
