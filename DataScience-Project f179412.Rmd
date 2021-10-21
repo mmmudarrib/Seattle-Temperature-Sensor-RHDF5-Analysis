@@ -14,7 +14,7 @@ Setup of Rhdf5 Installation
 
 ```{r}
 if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
+    install.packages("BiocManager",repo="https://cran.rstudio.com/")
 BiocManager::install(version = "3.13")
 BiocManager::install("rhdf5")
 ```
@@ -81,7 +81,7 @@ sub<-aggregate(data$temperature$mean, list(data$temperature$NDate), mean)
 Now lets plot this data 
 
 ```{r}
-install.packages("ggplot2")
+install.packages("ggplot2",repo="https://cran.rstudio.com/")
 library("ggplot2")
 ggplot(data = sub, aes(Group.1, x,group = 1)) +geom_line()
 ```
